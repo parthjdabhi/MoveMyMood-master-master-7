@@ -348,8 +348,6 @@
 			children = (
 				5ECFCEFD1E1E51D400801DA1 /* Custom AlertView */,
 				5ED4806E1E1A6D7200C3FE15 /* Utility */,
-				DA7C7A181E00DBC400F2DC7C /* AppDelegate.swift */,
-				DA7C7A1A1E00DBC400F2DC7C /* ViewController.swift */,
 				DA7C7A851E011F5200F2DC7C /* Initial 4 Screens */,
 				5E6CD5BB1E02B48900730CD0 /* Categories */,
 				5ED480631E1A5F0B00C3FE15 /* Local Notification - Part3 */,
@@ -357,13 +355,15 @@
 				DA7C7A5C1E010B0000F2DC7C /* ReminderViewController.swift */,
 				DA7C7A601E010C5B00F2DC7C /* ReminderNextViewController.swift */,
 				5E6472751E0BE9DD00FBF049 /* ActivityLandingVC.swift */,
+				DA7C7A4B1E00E90D00F2DC7C /* Pictures */,
+				DA7C7A181E00DBC400F2DC7C /* AppDelegate.swift */,
+				DA7C7A1A1E00DBC400F2DC7C /* ViewController.swift */,
 				DA7C7A1C1E00DBC400F2DC7C /* Main.storyboard */,
 				DA7C7A221E00DBC400F2DC7C /* Assets.xcassets */,
 				DA7C7A241E00DBC400F2DC7C /* LaunchScreen.storyboard */,
 				DA7C7A271E00DBC400F2DC7C /* Info.plist */,
 				5EDF26601E2DCEA800D985DA /* Category.plist */,
 				DA7C7A1F1E00DBC400F2DC7C /* Postnatal_Depression.xcdatamodeld */,
-				DA7C7A4B1E00E90D00F2DC7C /* Pictures */,
 				5E6CD5C01E02BF2100730CD0 /* Images.xcassets */,
 			);
 			path = "Postnatal Depression";

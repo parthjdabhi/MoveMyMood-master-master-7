@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PopupDialog
 
 class SubCategoryVC: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
@@ -76,7 +77,34 @@ class SubCategoryVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         self.navigationController?.pushViewController(next, animated: true)
     }
     
+    func SowAlertRateOrSelectMore() {
+        let alertVC = AlertSubtitleVC(nibName: "CustomAlertViewVC", bundle: nil, alertTitle: "Message", alertSubTitle: "Do you want to rate them or pick more activity?", Button1Name: "Let's rate it", Button2name: "Pick more activity")
+        
+        //alertVC.lblSubTitle.removeFromSuperview()
+        
+        // Create the dialog  - PopupDialogTransitionStyle
+        let popup = PopupDialog(viewController: alertVC, buttonAlignment: .Vertical, transitionStyle: .BounceDown
+        , gestureDismissal: true) {
+            print("Popup dismissed")
+        }
+        
+        alertVC.actionBtn1Tapped = {
+            print("You tapped button1 : Rate Activity")
+            popup.dismiss({ 
+                self.actionNextButton(self.btnNext)
+            })
+        }
+        
+        alertVC.actionBtn2Tapped = {
+            print("You tapped button2 : select more action")
+            popup.dismiss()
+        }
+        
+        // Present dialog
+        self.navigationController?.presentViewController(popup, animated: true, completion: nil)
+    }
     
+    // MARK: - Tableview Delegate
 //    func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
 //        return 100
 //    }
@@ -193,6 +221,7 @@ class SubCategoryVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         
         if selectedSections.contains(indexPath.section) {
             if indexPath.row == 0 {
+                // Hide Section
                 UIView.animateWithDuration(0.2, animations: {
                     currentCell?.imgStatus.transform = CGAffineTransformMakeRotation(CGFloat(M_PI * 2.0));
                 })
@@ -218,6 +247,10 @@ class SubCategoryVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 
                 let SubSubCategories = (SubCategories[indexPath.section]["SubSubCategories"] as? Array<Dictionary<String,AnyObject>> ?? [])
                 SelectedSubSubCategoryTitle = (SubSubCategories.count > (indexPath.row-1)) ? SubSubCategories[indexPath.row-1]["Title"] as? String ?? "-" : "-"
+                
+                if selectedIndexpaths.count == 5 {
+                    SowAlertRateOrSelectMore()
+                }
                 
                 //let next = self.storyboard?.instantiateViewControllerWithIdentifier("RateActivitiesVC") as! RateActivitiesVC!
                 //let next = self.storyboard?.instantiateViewControllerWithIdentifier("MyActivityListVC") as! MyActivityListVC!
