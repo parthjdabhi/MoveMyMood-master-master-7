@@ -16,6 +16,8 @@ class SubCategoryVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
     @IBOutlet weak var btnNext: UIButton!
     
     var SubCategories:Array<Dictionary<String,AnyObject>> = []
+    var MainCatKey = "-"
+    var SelectedSubSubCategoryTitleArray:[String] = []
     
 //    var categories:Array<String> = ["At home","Outside","With others","Just for me"]
 //    var items:Dictionary<String,AnyObject> = ["At home":["Self care", "Grooming", "Get your zen on", "Engage your senses", "Let your creative juices flow", "Household stuff", "Future and past fun"],"Outside":["Outside", "Grooming","Health", "Treat", "Exercise"],"With others":["Connect", "Meet with a friend","Romantic fun", "For others"],"Just for me":["Self care", "Grooming", "Get your zen on", "Engage your senses", "Let your creative juices flow", "Household stuff", "Future and past fun"]]
@@ -37,6 +39,33 @@ class SubCategoryVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
         tblCategory.contentInset = UIEdgeInsetsMake(0, 0, 80, 0)
         tblCategory.estimatedRowHeight = tblCategory.rowHeight
         tblCategory.rowHeight = UITableViewAutomaticDimension
+        
+        //Check Previously selected subsubcategory for this Main activity
+        
+        MainCatKey = (SelectedCategory["MainCategory"] as? String ?? "-").stringByReplacingOccurrencesOfString(" ", withString: "")
+        if let PSelectedCategories = NSUserDefaults.standardUserDefaults().objectForKey(MainCatKey) as? [String] {
+            print("PSelectedCategories ; \(PSelectedCategories)")
+            
+            for (index,value) in SubCategories.enumerate()
+            {
+                let SubSubCategories = (SubCategories[index]["SubSubCategories"] as? Array<Dictionary<String,AnyObject>> ?? [])
+                
+                for (subIndex, subValue) in SubSubCategories.enumerate() {
+                    if let SubSubCatTitle = SubSubCategories[subIndex]["Title"] as? String where PSelectedCategories.contains(SubSubCatTitle){
+                        selectedIndexpaths.append(NSIndexPath(forRow: subIndex+1, inSection: index))
+                        SelectedSubSubCategoryTitleArray.append(SubSubCatTitle)
+                    }
+                }
+            }
+//            let SubSubCategories = (SubCategories[indexPath.section]["SubSubCategories"] as? Array<Dictionary<String,AnyObject>> ?? [])
+//            SelectedSubSubCategoryTitle = (SubSubCategories.count > (indexPath.row-1)) ? SubSubCategories[indexPath.row-1]["Title"] as? String ?? "-" : "-"
+//            if let index = SelectedSubSubCategoryTitleArray.indexOf(SelectedSubSubCategoryTitle ?? "-") {
+//                SelectedSubSubCategoryTitleArray.removeAtIndex(index)
+//                NSUserDefaults.standardUserDefaults().setObject(SelectedSubSubCategoryTitleArray, forKey: MainCatKey)
+//                NSUserDefaults.standardUserDefaults().synchronize()
+//            }
+        }
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -248,6 +277,10 @@ class SubCategoryVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
                 let SubSubCategories = (SubCategories[indexPath.section]["SubSubCategories"] as? Array<Dictionary<String,AnyObject>> ?? [])
                 SelectedSubSubCategoryTitle = (SubSubCategories.count > (indexPath.row-1)) ? SubSubCategories[indexPath.row-1]["Title"] as? String ?? "-" : "-"
                 
+                SelectedSubSubCategoryTitleArray.append(SelectedSubSubCategoryTitle ?? "-")
+                NSUserDefaults.standardUserDefaults().setObject(SelectedSubSubCategoryTitleArray, forKey: MainCatKey)
+                NSUserDefaults.standardUserDefaults().synchronize()
+                
                 if selectedIndexpaths.count == 5 {
                     SowAlertRateOrSelectMore()
                 }
@@ -283,6 +316,15 @@ class SubCategoryVC: UIViewController, UITableViewDelegate, UITableViewDataSourc
             selectedIndexpaths.removeAtIndex(index)
             let currentCell:CategoryTableViewCell? = tableView.cellForRowAtIndexPath(indexPath) as? CategoryTableViewCell
             currentCell?.backgroundColor = UIColor.whiteColor()
+            
+            
+            let SubSubCategories = (SubCategories[indexPath.section]["SubSubCategories"] as? Array<Dictionary<String,AnyObject>> ?? [])
+            SelectedSubSubCategoryTitle = (SubSubCategories.count > (indexPath.row-1)) ? SubSubCategories[indexPath.row-1]["Title"] as? String ?? "-" : "-"
+            if let index = SelectedSubSubCategoryTitleArray.indexOf(SelectedSubSubCategoryTitle ?? "-") {
+                SelectedSubSubCategoryTitleArray.removeAtIndex(index)
+                NSUserDefaults.standardUserDefaults().setObject(SelectedSubSubCategoryTitleArray, forKey: MainCatKey)
+                NSUserDefaults.standardUserDefaults().synchronize()
+            }
         }
         btnNext.hidden = (selectedIndexpaths.count > 0) ? false : true
         
